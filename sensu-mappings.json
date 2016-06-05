@@ -1,0 +1,48 @@
+{
+  "hosts": {
+    "map": {
+      "name"          : ["name", "alias", "display_name"],
+      "address"       : "address",
+      "subscriptions" : "groups",
+      "timestamp"     : "last_check",
+      "service:{{(service `keepalive`)}}": {
+        "plugin_output"      : "plugin_output",
+        "state"              : "state",
+        "current_attempt"    : "current_attempt",
+        "max_check_attempts" : "max_check_attempts",
+        "state_type"         : "state_type"
+      }
+    },
+    "default": {
+      "has_been_checked": 1
+    }
+  },
+
+  "services": {
+    "map": {
+      "client": ["host_name", "host_alias", "host_address"],
+      "check" : {
+        "command"     : "check_command",
+        "interval"    : "check_interval",
+        "name"        : ["service_description", "description", "display_name"],
+        "duration"    : "execution_time",
+        "subscribers" : "groups",
+        "executed"    : "last_check",
+        "output"      : ["long_plugin_output",
+                         {"field"    : "plugin_output",
+                          "template" : "{{index (split .value `|`) 0}}"}
+                        ],
+        "status"      : "state",
+        "issued"      : [{"field"    : "next_check",
+                          "template" : "{{add .value .src.check.interval}}"}
+                        ]
+      }
+    },
+    "default": {
+      "has_been_checked"   : 1,
+      "current_attempt"    : 1,
+      "max_check_attempts" : 1,
+      "state_type"         : 1
+    }
+  }
+}
